@@ -41,6 +41,13 @@ $for(translator)$
 $endfor$
 </p>
 $endif$
+$if(uploader)$
+<p>Người đăng:
+$for(uploader)$
+  <br />&#160;&#160;&#160;&#160;$uploader$
+$endfor$
+</p>
+$endif$
 </section>
 $else$
 $for(include-before)$
