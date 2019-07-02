@@ -9,6 +9,7 @@ import javax.imageio.ImageIO;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class TTVTitlePage {
@@ -31,9 +32,14 @@ public class TTVTitlePage {
 		return novel.getElementsByClass("book-info").first().getElementsByClass("blue").first().wholeText();
 	}
 
-	public Stream<String> getTranslator() {
-		return novel.getElementsByClass("book-state").first().getElementsByClass("detail").first()
+	public Stream<String> getUploader() {
+		Element element = novel.getElementsByClass("book-state").first();
+		if (element.text().contains("Người đăng")) {
+		return element.getElementsByClass("detail").first()
 				.getElementsByAttribute("href").stream().map(c -> c.wholeText().trim());
+		} else {
+			return null;
+		}
 	}
 
 	public String getNovelIntro() {

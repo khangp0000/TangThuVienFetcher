@@ -85,7 +85,7 @@ public class EpubMaker {
 	}
 
 	public static String coverImage = null;
-	public static String css = null;
+	public static String template = null;
 	public static String PANDOC = "pandoc";
 	public boolean enableTableOfContent = true;
 
@@ -177,7 +177,7 @@ public class EpubMaker {
 
 	private static void generateEpub(CommandLine cmd) throws IOException {
 		File contentFolder;
-		File css;
+		File template;
 		boolean enableTableOfContent = true;
 		File output;
 
@@ -193,27 +193,32 @@ public class EpubMaker {
 			output = new File(tokens[tokens.length - 1] + builder.toString() + ".epub");
 		}
 
-		String cssStr = cmd.getOptionValue("t");
-		if (cssStr != null) {
-			css = new File(cssStr);
+		String templateStr = cmd.getOptionValue("t");
+		if (templateStr != null) {
+			template = new File(templateStr);
 		} else {
-			URL cssURI = EpubMaker.class.getClassLoader()
-					.getResource("MyTemplate.epub3");
-			css = File.createTempFile(FilenameUtils.getBaseName(cssURI.getFile()),
-					'.' + FilenameUtils.getExtension(cssURI.getFile()));
-			IOUtils.copy(cssURI.openStream(), FileUtils.openOutputStream(css));
-			FileUtils.forceDeleteOnExit(css);
+			template = createTempTemplateFile();
 		}
 
 		if (cmd.hasOption("h")) {
 			enableTableOfContent = false;
-		}
+		}	
 
 		try {
-			EpubBuilder.buildEpubFromMarkdownFolder(contentFolder, css, enableTableOfContent, output);
+			EpubBuilder.buildEpubFromMarkdownFolder(contentFolder, template, enableTableOfContent, output);
 		} catch (Exception e) {
 			FileUtils.forceDelete(output);
 			throw e;
 		}
+	}
+	
+	public static File createTempTemplateFile() throws IOException {
+		URL templateURI = EpubMaker.class.getClassLoader()
+				.getResource("MyTemplate.epub3");
+		File template = File.createTempFile(FilenameUtils.getBaseName(templateURI.getFile()),
+				'.' + FilenameUtils.getExtension(templateURI.getFile()));
+		IOUtils.copy(templateURI.openStream(), FileUtils.openOutputStream(template));
+		FileUtils.forceDeleteOnExit(template);
+		return template;
 	}
 }

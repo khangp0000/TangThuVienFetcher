@@ -9,11 +9,11 @@ import org.json.JSONObject;
 import org.jsoup.Jsoup;
 
 public class NovelSearcher {
-	public static class SearchResult {
-		public final String name;
-		public final String url;
+	public static class NovelSearchResult {
+		private final String name;
+		private final String url;
 
-		public SearchResult(JSONObject input) throws Exception {
+		public NovelSearchResult(JSONObject input) throws Exception {
 			if (!input.getString("type").equals("story")) {
 				throw new Exception();
 			}
@@ -28,17 +28,25 @@ public class NovelSearcher {
 
 		@Override
 		public String toString() {
-			return name + "   -   " + url;
+			return name;
+		}
+		
+		public String getName() {
+			return name;
+		}
+		
+		public String getURL() {
+			return url;
 		}
 	}
-
-	public static List<SearchResult> search(String str) throws IOException {
+	
+	public static List<NovelSearchResult> search(String str) throws IOException {
 		JSONArray list = new JSONArray(
 				Jsoup.connect("https://ngontinh.tangthuvien.vn/tim-kiem?term=" + str).ignoreContentType(true).get().text());
-		List<SearchResult> results = new ArrayList<>();
+		List<NovelSearchResult> results = new ArrayList<>();
 		list.forEach(r -> {
 			try {
-				results.add(new SearchResult((JSONObject) r));
+				results.add(new NovelSearchResult((JSONObject) r));
 			} catch (Exception e) {
 			}
 		});

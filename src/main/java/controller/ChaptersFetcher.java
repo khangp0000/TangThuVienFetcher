@@ -58,8 +58,8 @@ public class ChaptersFetcher {
 		YAML.append("title: " + book.getNovelName() + '\n');
 		YAML.append("author: " + book.getNovelAuthor() + '\n');
 		YAML.append("uploader:\n");
-		Stream<String> translatorList = book.getTranslator();
-		translatorList.forEach(t -> {
+		Stream<String> uploaderList = book.getUploader();
+		uploaderList.forEach(t -> {
 			YAML.append(" - " + t + '\n');
 		});
 		YAML.append("lang: vi\n");
