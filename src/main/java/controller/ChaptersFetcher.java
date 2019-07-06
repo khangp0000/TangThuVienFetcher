@@ -117,7 +117,7 @@ public class ChaptersFetcher {
 			if (content.isEmpty()) {
 				throw new IOException("Empty content: " + StringNormalizer.NormalizeToASCII(chapterName));
 			}
-			writer.write("# " + book.getChapterName(chapter) + " #\n" + content);
+			writer.write("# " + book.getChapterName(chapter) + " #\n");
 			writer.write(content);
 			writer.write('\n');
 		}
